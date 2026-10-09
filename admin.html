@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Admin | Seleção Sublime</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#2b2b2d;color:#f5f5f7;font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px 60px}h1{font-size:26px;letter-spacing:-.02em;margin:0 0 4px}.mu{color:#a1a1a6;font-size:14px}
+input{width:100%;background:#3a3a3c;border:1px solid #505054;color:#f5f5f7;border-radius:12px;padding:14px;font:inherit;margin:14px 0}
+button,.bt{background:#ff3b8d;color:#fff;border:0;border-radius:980px;padding:11px 22px;font:600 15px inherit;cursor:pointer;text-decoration:none;display:inline-block}
+.c{background:#3a3a3c;border:1px solid #505054;border-radius:16px;padding:16px;margin:12px 0}.c:hover{border-color:#ff3b8d}.hd{cursor:pointer}
+.nm{font-weight:600;font-size:18px}.pk{color:#ff3b8d;font-weight:600}.q{margin:14px 0 2px;color:#a1a1a6;font-size:14px}.r{white-space:pre-wrap;background:#2b2b2d;border-radius:10px;padding:10px 12px}
+audio{width:100%;margin:8px 0}iframe{width:100%;height:480px;border:1px solid #505054;border-radius:12px;background:#fff}</style></head><body><main id="a"></main>
+<script>
+const a=document.getElementById("a");let K=sessionStorage.getItem("k")||"";
+const h=(t,p={},...k)=>{const e=document.createElement(t);Object.assign(e,p);k.flat().forEach(x=>e.append(x));return e};
+function login(m){a.replaceChildren(h("h1",{textContent:"Painel de seleção"}),h("div",{className:"mu",textContent:m||"Sublime Floricultura"}),(()=>{const i=h("input",{type:"password",placeholder:"Senha"});i.onkeydown=e=>{if(e.key=="Enter")go(i.value)};return i})(),h("button",{textContent:"Entrar",onclick:()=>go(a.querySelector("input").value)}))}
+async function go(k){K=k;const r=await fetch("/api/admin",{headers:{"x-admin-key":K}});if(!r.ok){sessionStorage.removeItem("k");return login("Senha incorreta")}sessionStorage.setItem("k",K);view(await r.json())}
+function view(D){a.replaceChildren(h("h1",{textContent:D.length+" candidatos"}),h("div",{className:"mu",textContent:"Mais recentes primeiro. Toque em um nome para abrir."}),...D.map((d,n)=>{const b=h("div",{hidden:true});const wa=(d.zap||"").replace(/\D/g,"");
+ b.append(h("div",{className:"q",textContent:"WhatsApp"}),h("a",{className:"bt",textContent:d.zap||"sem número",href:wa?"https://wa.me/55"+wa.replace(/^55/,""):"#",target:"_blank"}),h("div",{className:"q",textContent:"Idade: "+(d.idade||"")}));
+ if(d.audio)b.append(h("div",{className:"q",textContent:"Áudio"}),h("audio",{controls:true,preload:"none",src:d.audio}));
+ if(d.cv){b.append(h("div",{className:"q",textContent:"Currículo: "+d.cvName}),h("a",{className:"bt",textContent:"Abrir arquivo",href:d.cv,target:"_blank"}));if(/\.pdf$/i.test(d.cvName))b.append(h("div",{className:"q"}),h("iframe",{src:d.cv,loading:"lazy"}))}
+ (d.respostas||[]).forEach(x=>b.append(h("div",{className:"q",textContent:x.q}),h("div",{className:"r",textContent:x.r||"sem resposta"})));
+ const c=h("div",{className:"c"},h("div",{className:"hd",onclick:()=>b.hidden=!b.hidden},h("div",{className:"nm",textContent:(n+1)+". "+(d.nome||"Sem nome")}),h("div",{className:"mu",textContent:new Date(d.em).toLocaleString("pt-BR")+" · nota "+d.nota+" na múltipla escolha"})),b);return c}))}
+K?go(K):login();
+</script></body></html>

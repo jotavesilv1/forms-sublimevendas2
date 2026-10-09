@@ -1,0 +1,5 @@
+1. Suba esta pasta para um repositório no GitHub (ou rode "npx vercel" dentro dela).
+2. Na Vercel: importe o projeto. Depois, aba Storage > Create > Blob e conecte ao projeto.
+3. Settings > Environment Variables: crie ADMIN_PASSWORD com a senha do painel.
+4. Faça Redeploy. O formulário fica na raiz do site e o painel em /admin.html.
+5. Opcional: coloque uma foto na pasta com o nome capa.jpg para ela aparecer na capa.
